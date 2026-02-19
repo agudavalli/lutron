@@ -9,6 +9,30 @@ import mediapipe as mp
 mp_hands = mp.solutions.hands
 mp_drawing = mp.solutions.drawing_utils
 
+def get_finger_state(landmarks, handedness_label):
+    Finger = Enum('Finger', 'THUMB INDEX MIDDLE RING PINKY')
+    #tip_idx = {4, Finger.INDEX: 8, Finger.MIDDLE: 12, Finger.RING: 16, Finger.PINKY: 20}
+    pip_idx = {Finger.THUMB: 3, Finger.INDEX: 6, Finger.MIDDLE: 10, Finger.RING: 14, Finger.PINKY: 18}
+    tip_idx = [4, 8, 12, 16, 20]
+    pip_idx = [3, 6, 10, 14, 18]
+    binary = '00000'
+    for idx in range(5):
+        tip = landmarks.landmark[tip_idx[idx]]
+        pip = landmarks.landmark[pip_idx[idx]]
+        if idx == 0:
+            if handedness_label == 'Right':
+                if tip.x < pip.x:
+                    binary[idx] = '1'
+            else:
+                if tip.x > pip.x:
+                    binary = binary[:idx] + '1' + binary[idx+1:]
+        else:
+            if tip.y < pip.y:
+                binary = binary[:idx] + '1' + binary[idx+1:]
+    return binary
+
+
+
 def main():
     cap = cv2.VideoCapture(0)
     #cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)
