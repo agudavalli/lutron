@@ -4,7 +4,10 @@ import neopixel
 NUM_LEDS   = 160
 BRIGHTNESS = 0.4
 
-strip = neopixel.NeoPixel(board.D18, NUM_LEDS, brightness=BRIGHTNESS, auto_write=False)
+def all_red():
+  strip = neopixel.NeoPixel(board.D18, NUM_LEDS, brightness=BRIGHTNESS, auto_write=False)
 
-strip.fill((255, 0, 0))
-strip.show()
+  strip.fill((255, 0, 0))
+  strip.show()
+
+all_red()
