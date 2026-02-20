@@ -12,4 +12,6 @@ def readschedule():
 def get_duration(file):
     audio = MP3(file)
     return audio.info.length
+
+
 readschedule()
