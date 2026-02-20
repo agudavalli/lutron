@@ -5,6 +5,8 @@
 import time
 import cv2
 import mediapipe as mp
+from enum import Enum
+from functions import readschedule, take_picture, take_picture2
 
 mp_hands = mp.solutions.hands
 mp_drawing = mp.solutions.drawing_utils
@@ -12,7 +14,7 @@ mp_drawing = mp.solutions.drawing_utils
 def get_finger_state(landmarks, handedness_label):
     Finger = Enum('Finger', 'THUMB INDEX MIDDLE RING PINKY')
     #tip_idx = {4, Finger.INDEX: 8, Finger.MIDDLE: 12, Finger.RING: 16, Finger.PINKY: 20}
-    pip_idx = {Finger.THUMB: 3, Finger.INDEX: 6, Finger.MIDDLE: 10, Finger.RING: 14, Finger.PINKY: 18}
+    #pip_idx = {Finger.THUMB: 3, Finger.INDEX: 6, Finger.MIDDLE: 10, Finger.RING: 14, Finger.PINKY: 18}
     tip_idx = [4, 8, 12, 16, 20]
     pip_idx = [3, 6, 10, 14, 18]
     binary = '00000'
@@ -22,7 +24,7 @@ def get_finger_state(landmarks, handedness_label):
         if idx == 0:
             if handedness_label == 'Right':
                 if tip.x < pip.x:
-                    binary[idx] = '1'
+                    binary = binary[:idx] + '1' + binary[idx+1:]
             else:
                 if tip.x > pip.x:
                     binary = binary[:idx] + '1' + binary[idx+1:]
@@ -45,8 +47,6 @@ def main():
         min_tracking_confidence=0.5,
     )
 
-    prev_time = 0.0
-
     try:
         while True:
             ret, frame = cap.read()
@@ -62,6 +62,9 @@ def main():
             if results.multi_hand_landmarks:
                 for hand_landmarks, handedness in zip(results.multi_hand_landmarks, results.multi_handedness):
                     # Draw landmarks and connections
+                    label = handedness.classification[0].label
+                    if label == 'Left':
+                        continue  # Skip left hand for now
                     mp_drawing.draw_landmarks(
                         frame,
                         hand_landmarks,
@@ -70,6 +73,8 @@ def main():
                         mp_drawing.DrawingSpec(color=(0,0,255), thickness=2, circle_radius=2),
                     )
 
+
+
                     # Example: show label (Left/Right) near wrist landmark
                     wrist = hand_landmarks.landmark[mp_hands.HandLandmark.WRIST]
                     h, w, _ = frame.shape
@@ -77,12 +82,19 @@ def main():
                     label = handedness.classification[0].label
                     cv2.putText(frame, label, (cx + 10, cy + 10), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255,255,255), 2)
 
-            # FPS
-            curr_time = time.time()
-            fps = 1.0 / (curr_time - prev_time) if prev_time else 0.0
-            prev_time = curr_time
-            cv2.putText(frame, f'FPS: {int(fps)}', (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1.0, (0,255,0), 2)
+                    # Get finger state and display
+                    finger_state = get_finger_state(hand_landmarks, label)
+                    if finger_state == '01100':
+                        take_picture(frame)
+                        cv2.putText(frame, 'Picture Taken!', (10, 60), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0,255,255), 2)
+                    cv2.putText(frame, finger_state, (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255,255,0), 2)
 
+
+            # FPS
+            #curr_time = time.time()
+            #fps = 1.0 / (curr_time - prev_time) if prev_time else 0.0
+            #prev_time = curr_time
+            #cv2.putText(frame, f'FPS: {int(fps)}', (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1.0, (0,255,0), 2)
             cv2.imshow('Hand Tracking', frame)
             key = cv2.waitKey(1) & 0xFF
             if key == 27 or key == ord('q'):  # Esc or q

@@ -1,5 +1,6 @@
 from gtts import gTTS
 from mutagen.mp3 import MP3
+import cv2
 import os
 
 def readschedule():
@@ -13,5 +14,8 @@ def get_duration(file):
     audio = MP3(file)
     return audio.info.length
 
-
-readschedule()
+def take_picture(frame):
+    #TODO: Email the photos to the user
+    filename = 'captured_image.jpg'
+    cv2.imwrite(filename, frame)
+    print(f"Image saved as {filename}")
