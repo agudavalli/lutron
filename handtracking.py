@@ -6,7 +6,7 @@ import time
 import cv2
 import mediapipe as mp
 from enum import Enum
-from functions import readschedule, take_picture, take_picture2
+from functions import readschedule, take_picture
 
 mp_hands = mp.solutions.hands
 mp_drawing = mp.solutions.drawing_utils
@@ -56,6 +56,7 @@ def main():
             # Flip for selfie view and convert color
             frame = cv2.flip(frame, 1)
             rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+            frame = cv2.resize(frame, (640, 480))
 
             results = hands.process(rgb)
 
