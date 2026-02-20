@@ -1,7 +1,10 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Thu Feb 19 22:42:07 2026
+import board
+import neopixel
 
-@author: leojs
-"""
+NUM_LEDS   = 160
+BRIGHTNESS = 0.4
 
+strip = neopixel.NeoPixel(board.D18, NUM_LEDS, brightness=BRIGHTNESS, auto_write=False)
+
+strip.fill((255, 0, 0))
+strip.show()
