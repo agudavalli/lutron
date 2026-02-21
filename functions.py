@@ -23,7 +23,7 @@ def readschedule():
     file = 'test.mp3'
     tts = gTTS(text="You have your lutron presentation at 1pm, remember to finish the project", lang='en', slow=False)
     tts.save(file)
-    os.system("aplay " + file)
+    audio.play_mp3(file)
 
 def send_email():
     smtp_server = 'smtp.gmail.com'
@@ -56,7 +56,7 @@ def send_email():
 
 def take_picture(frame):
     #TODO: Add call to lighting for all white LEDS
-
+    audio.play_mp3('camera.mp3')
     filename = 'captured_image.jpg'
     cv2.imwrite(filename, frame)
     print(f"Image saved as {filename}")
@@ -83,7 +83,7 @@ def stop_song():
     if _audio_process is not None:
         _audio_process.terminate()
         _audio_process = None
-    os.system('aplay what.mp3')
+    audio.play_mp3('what.mp3', True)
 
 def words_of_affirmation():
     phrase = random.randint(0,5)
@@ -100,7 +100,7 @@ def words_of_affirmation():
     tts = gTTS(text=speech, lang='en', slow=False)
     filename = 'affirmation.mp3'
     tts.save(filename)
-    os.system("aplay " + filename)
+    audio.play_mp3(filename)
 
 def play_flashing_lights():
     global _audio_process
@@ -119,10 +119,12 @@ def nether():
     send_command('nether')
 
 def boot_up():
+    filename = 'intro.mp3'
     file = 'intro.mp3'
     tts = gTTS(text="Booting up", lang='en', slow=False)
     tts.save(file)
-    os.system("aplay " + file)
+    audio.play_mp3(file, True)
+    audio.play_mp3(filename, True)
 
 
 def send_command(command):
