@@ -44,8 +44,8 @@ def main():
     calendar_flag = False
     calibrated = False
 
-    #functions.boot_up()
-    functions.nether()
+    functions.boot_up()
+    #functions.nether()
 
 
     cap = cv2.VideoCapture(0)
