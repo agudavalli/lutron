@@ -109,9 +109,6 @@ def play_flashing_lights():
 
     send_command('flashing_lights')
 
-    #call lighting sequence here
-    #flashinglightsv2.flashing_lights_kanye()
-
 def calibrate():
     send_command('all_yellow')
 
