@@ -103,7 +103,7 @@ def main():
                     finger_state = get_finger_state(hand_landmarks, label)
                     if finger_state == '01100' and not picture:
                         functions.take_picture(frame)
-                        cv2.putText(frame, 'Picture Taken!', (10, 60), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0,255,255), 2)
+                        #cv2.putText(frame, 'Picture Taken!', (10, 60), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0,255,255), 2)
                         picture = True
                         calendar_flag = False
 
