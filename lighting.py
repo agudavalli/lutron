@@ -4,7 +4,7 @@ import board
 import neopixel
 import time
 import math
-from flashinglightsv2 import flashing_lights_kanye
+from flashinglights import flashing_lights_kanye
 from mirrorpoweron import boot_sequence
 
 NUM_LEDS   = 160
