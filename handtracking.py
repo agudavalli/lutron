@@ -45,6 +45,7 @@ def main():
     calibrated = False
 
     functions.boot_up()
+    functions.nether()
 
 
     cap = cv2.VideoCapture(0)
