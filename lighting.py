@@ -3,6 +3,7 @@ import sys
 import board
 import neopixel
 import time
+import math
 
 NUM_LEDS   = 160
 BRIGHTNESS = 0.4
