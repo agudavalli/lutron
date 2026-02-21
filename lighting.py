@@ -4,6 +4,8 @@ import board
 import neopixel
 import time
 import math
+from flashinglightsv2 import flashing_lights_kanye
+from mirrorpoweron import boot_sequence
 
 NUM_LEDS   = 160
 BRIGHTNESS = 0.4
@@ -145,3 +147,7 @@ for line in sys.stdin:
         all_yellow()
     elif line == 'nether':
         nether()
+    elif line == 'power_on':
+        boot_sequence()
+    elif line == 'flashing_lights':
+        flashing_lights_kanye()

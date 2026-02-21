@@ -44,7 +44,8 @@ def main():
     calendar_flag = False
     calibrated = False
 
-    functions.nether()
+    functions.boot_up()
+
 
     cap = cv2.VideoCapture(0)
     #cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)

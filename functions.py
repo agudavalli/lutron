@@ -120,11 +120,8 @@ def nether():
 
 def boot_up():
     filename = 'intro.mp3'
-    file = 'intro.mp3'
-    tts = gTTS(text="Booting up", lang='en', slow=False)
-    tts.save(file)
-    audio.play_mp3(file, True)
     audio.play_mp3(filename, True)
+    send_command('power_on')
 
 
 def send_command(command):
