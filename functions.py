@@ -78,11 +78,11 @@ def play_song():
         send_command('flashing_lights')
     elif song == 2:
         filename = 'allofthelights.mp3'
+        print(filename)
         send_command('all_of_the_lights')
     elif song == 3:
         filename = 'blindinglights.mp3'
         send_command('blinding_lights')
-    print(filename)
     _audio_process = audio.play_mp3(filename)
 
 def stop_song():

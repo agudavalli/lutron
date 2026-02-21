@@ -851,6 +851,15 @@ def blinding_lights_weeknd(strip):
             breathing  = 0.2 + 0.4 * math.sin(math.pi * progress * 1.5)
             val_r = int(180 * breathing)
             val_b = int(60 * breathing)
+
+            if val_r > 256:
+                val_r = 255
+            if val_b > 256:
+                val_b = 255
+            if val_b < 0:
+                val_b = 0
+            if val_r < 0:
+                val_r = 0
             fill((val_r, 0, val_b))
             show(strip)
             time.sleep(0.04)
