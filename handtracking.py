@@ -10,7 +10,7 @@ from enum import Enum
 import subprocess
 import sys
 
-from functions import play_flashing_lights, words_of_affirmation, readschedule, play_song, stop_song
+from functions import play_flashing_lights, words_of_affirmation, readschedule, play_song, stop_song, take_picture
 
 mp_hands = mp.solutions.hands
 mp_drawing = mp.solutions.drawing_utils
@@ -60,12 +60,11 @@ def main():
     try:
         while True:
             ret, frame = cap.read()
-            frame = cv2.flip(frame, 0)  # Mirror for selfie view
             if not ret:
                 break
 
             # Flip for selfie view and convert color
-            #frame = cv2.flip(frame, 1)
+            frame = cv2.flip(frame, 0)
             rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 
             results = hands.process(rgb)
@@ -96,12 +95,13 @@ def main():
                     # Get finger state and display
                     finger_state = get_finger_state(hand_landmarks, label)
                     if finger_state == '01100':
-                        send_command('take_picture')
+                        take_picture()
                         cv2.putText(frame, 'Picture Taken!', (10, 60), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0,255,255), 2)
 
                     if finger_state == '11111' and song_flag:
                         stop_song()
                         song_flag = False
+
                     if finger_state == '11001' and not song_flag:
                         play_song()
                         song_flag = True
@@ -118,7 +118,7 @@ def main():
                         song_flag = True
 
 
-                    cv2.putText(frame, finger_state, (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255,255,0), 2)
+                    #cv2.putText(frame, finger_state, (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255,255,0), 2)
 
 
             # FPS
@@ -126,7 +126,7 @@ def main():
             #fps = 1.0 / (curr_time - prev_time) if prev_time else 0.0
             #prev_time = curr_time
             #cv2.putText(frame, f'FPS: {int(fps)}', (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1.0, (0,255,0), 2)
-            cv2.imshow('Hand Tracking', frame)
+            #cv2.imshow('Hand Tracking', frame)
             key = cv2.waitKey(1) & 0xFF
             if key == 27 or key == ord('q'):  # Esc or q
                 break
