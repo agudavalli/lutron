@@ -119,7 +119,7 @@ def main():
                         picture = False
                         calendar_flag = False
 
-                    elif finger_state == '00110' and not calendar_flag:
+                    elif finger_state == '01010' and not calendar_flag:
                         functions.readschedule()
                         calendar_flag = True
                         picture = False
