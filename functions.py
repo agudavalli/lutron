@@ -18,6 +18,9 @@ import audio
 
 #import flashinglightsv2
 
+_audio_process = None
+_lighting_process = None
+
 
 def readschedule():
     file = 'test.mp3'
