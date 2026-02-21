@@ -149,8 +149,8 @@ for line in sys.stdin:
     elif line == 'nether':
         nether()
     elif line == 'flashing_lights':
-        #flashing_lights_kanye()
-        leofunctions.flashing_lights_kanye(strip)
+        flashing_lights_kanye()
+        #leofunctions.flashing_lights_kanye(strip)
     elif line == 'camera':
         leofunctions.camera_flash(strip)
     elif line == 'affirmation':
