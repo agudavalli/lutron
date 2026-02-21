@@ -10,9 +10,10 @@ from email import encoders
 from email.mime.base import MIMEBase
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-import flashinglights
+#import flashinglights
 import subprocess
 import random
+import sys
 
 
 def readschedule():
@@ -50,9 +51,12 @@ def send_email():
 
 
 
-def take_picture(frame):
+def take_picture():
     #TODO: Add call to lighting for all white LEDS
+
     filename = 'captured_image.jpg'
+    cam = cv2.VideoCapture(0)
+    ret, frame = cam.read()
     cv2.imwrite(filename, frame)
     print(f"Image saved as {filename}")
     send_email()
@@ -103,6 +107,22 @@ def play_flashing_lights():
     _audio_process = subprocess.Popen(['afplay', filename])
 
     #call lighting sequence here
-    flashinglights.flashing_lights_kanye()
+    #flashinglights.flashing_lights_kanye()
+
+
+for line in sys.stdin:
+    command = line.strip()
+    if command == "readschedule":
+        readschedule()
+    elif command == "take_picture":
+        take_picture()
+    elif command == "play_song":
+        play_song()
+    elif command == "stop_song":
+        stop_song()
+    elif command == "words_of_affirmation":
+        words_of_affirmation()
+    elif command == "play_flashing_lights":
+        play_flashing_lights()
 
 

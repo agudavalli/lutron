@@ -6,7 +6,9 @@ import time
 import cv2
 import mediapipe as mp
 from enum import Enum
-from functions import readschedule, take_picture, stop_song, play_song, words_of_affirmation, play_flashing_lights
+#from functions import readschedule, take_picture, stop_song, play_song, words_of_affirmation, play_flashing_lights
+import subprocess
+import sys
 
 mp_hands = mp.solutions.hands
 mp_drawing = mp.solutions.drawing_utils
@@ -49,6 +51,16 @@ def main():
         min_tracking_confidence=0.5,
     )
 
+    command_line = subprocess.Popen(
+    ["sudo", "python3", "neopixel_controller.py"],
+    stdin=subprocess.PIPE,
+    text=True
+    )
+
+    def send_command(command):
+        command_line.stdin.write(command + "\n")
+        command_line.stdin.flush()
+
     try:
         while True:
             ret, frame = cap.read()
@@ -87,25 +99,25 @@ def main():
                     # Get finger state and display
                     finger_state = get_finger_state(hand_landmarks, label)
                     if finger_state == '01100':
-                        take_picture(frame)
+                        send_command('take_picture')
                         cv2.putText(frame, 'Picture Taken!', (10, 60), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0,255,255), 2)
 
                     if finger_state == '11111' and song_flag:
-                        stop_song()
+                        send_command('stop_song')
                         song_flag = False
                     if finger_state == '11001' and not song_flag:
-                        play_song()
+                        send_command('play_song')
                         song_flag = True
 
                     if finger_state == '00110' and not cal_flag:
-                        readschedule()
+                        send_command('readschedule')
                         cal_flag = True
 
                     if finger_state == '00111':
-                        words_of_affirmation()
+                        send_command('words_of_affirmation')
 
                     if finger_state == '01001' and not song_flag:
-                        play_flashing_lights()
+                        send_command('flashing_lights')
                         song_flag = True
 
 
