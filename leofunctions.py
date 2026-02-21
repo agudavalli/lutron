@@ -214,6 +214,7 @@ def piano_scale_egg(strip):
     import random
 
     # --- Adjustable timing ---
+    time.sleep(5)
     BPM           = 153  # adjust to match video
     note_duration = 60 / BPM  # seconds per note
 
