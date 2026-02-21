@@ -379,4 +379,306 @@ def flashing_lights_kanye(strip):
             show(strip)
             time.sleep(0.05)
 
+# ___________________________________________________________
+# All of the Lights - Kanye West
+
+def all_of_the_lights_kanye(strip):
+    import random
+
+    total_leds = 134
+    BPM = 150
+    beat_interval = 60 / BPM  # 0.4 seconds per beat
+
+    # --- Color palette ---
+    GOLD          = (255, 180, 0)
+    GOLD_DIM      = (80, 50, 0)
+    AMBER         = (255, 100, 0)
+    AMBER_DIM     = (60, 25, 0)
+    WHITE         = (255, 255, 255)
+    WHITE_DIM     = (60, 60, 60)
+    RED           = (255, 0, 0)
+    ORANGE        = (255, 60, 0)
+    CYAN          = (0, 255, 220)
+    CYAN_DIM      = (0, 60, 55)
+    BLUE          = (0, 80, 255)
+    BLUE_DIM      = (0, 20, 80)
+    ELECTRIC      = (100, 0, 255)
+    OFF           = (0, 0, 0)
+
+    # --- Timestamps ---
+    T_RIHANNA     = 13.0
+    T_BEAT        = 28.0
+    T_CHORUS1     = 60.0
+    T_VERSE2      = 90.0
+    T_CHORUS2     = 120.0
+    T_BRIDGE      = 150.0
+    T_FINAL       = 180.0
+    T_OUTRO       = 225.0
+    T_END         = 300.0
+
+    def fill(color):
+        for i in range(total_leds):
+            strip[i] = color
+
+    def add_sparkles(count, color=WHITE):
+        for _ in range(count):
+            pos = random.randint(0, total_leds - 1)
+            strip[pos] = color
+
+    def beat_pulse(base_color, bright_color):
+        fill(bright_color)
+        show(strip)
+        time.sleep(0.07)
+        fill(base_color)
+
+    def get_section(t):
+        if t < T_RIHANNA:  return "trumpet"
+        if t < T_BEAT:     return "rihanna"
+        if t < T_CHORUS1:  return "verse1"
+        if t < T_VERSE2:   return "chorus1"
+        if t < T_CHORUS2:  return "verse2"
+        if t < T_BRIDGE:   return "chorus2"
+        if t < T_FINAL:    return "bridge"
+        if t < T_OUTRO:    return "final"
+        if t < T_END:      return "outro"
+        return "done"
+
+    start_time     = time.time()
+    last_beat_time = start_time
+    chase_step     = 0
+    train_length   = 5
+
+    while True:
+        now     = time.time()
+        elapsed = now - start_time
+        section = get_section(elapsed)
+
+        if section == "done":
+            fill(OFF)
+            show(strip)
+            break
+
+        beat_due = (now - last_beat_time) >= beat_interval
+
+        # -------------------------------------------------------
+        # TRUMPET INTRO 0:00-0:13
+        # Bright golds and whites, rapid horn energy
+        # -------------------------------------------------------
+        if section == "trumpet":
+            progress = elapsed / T_RIHANNA
+            # Rapid alternating flashes getting more intense
+            strobe_interval = 0.12 - (0.05 * progress)
+            phase = int(elapsed / strobe_interval) % 3
+
+            if phase == 0:
+                fill(WHITE)
+            elif phase == 1:
+                fill(GOLD)
+            else:
+                fill(AMBER)
+                add_sparkles(8, WHITE)
+
+            show(strip)
+            time.sleep(0.02)
+
+        # -------------------------------------------------------
+        # RIHANNA 0:13-0:28
+        # Multi color chaos, strobing white/gold/red/orange
+        # -------------------------------------------------------
+        elif section == "rihanna":
+            strobe_interval = 0.09
+            phase = int(elapsed / strobe_interval) % 6
+
+            colors = [WHITE, GOLD, RED, ORANGE, AMBER, WHITE]
+            fill(colors[phase])
+            if phase in [0, 5]:
+                add_sparkles(12, GOLD)
+            elif phase == 2:
+                add_sparkles(8, WHITE)
+
+            show(strip)
+            time.sleep(0.02)
+
+        # -------------------------------------------------------
+        # VERSE 1 0:28-1:00
+        # 150bpm gold/amber base, white beat pulse, chase train
+        # -------------------------------------------------------
+        elif section == "verse1":
+            if beat_due:
+                beat_pulse(AMBER_DIM, GOLD)
+                last_beat_time = now
+                chase_step = (chase_step + 6) % total_leds
+
+            fill(AMBER_DIM)
+            for t in range(train_length):
+                pos = (total_leds - 1 - chase_step - t) % total_leds
+                strip[pos] = GOLD
+
+            if random.random() < 0.3:
+                add_sparkles(3, WHITE_DIM)
+
+            show(strip)
+            time.sleep(0.02)
+
+        # -------------------------------------------------------
+        # CHORUS 1 1:00-1:30
+        # Gold/white base, cyan and blue burst in, energetic
+        # -------------------------------------------------------
+        elif section == "chorus1":
+            if beat_due:
+                if random.random() < 0.4:
+                    beat_pulse(GOLD_DIM, CYAN)
+                else:
+                    beat_pulse(GOLD_DIM, WHITE)
+                last_beat_time = now
+                chase_step = (chase_step + 9) % total_leds
+
+            fill(GOLD_DIM)
+            for t in range(train_length):
+                pos = (total_leds - 1 - chase_step - t) % total_leds
+                strip[pos] = CYAN
+
+            if random.random() < 0.5:
+                add_sparkles(5, WHITE)
+            if random.random() < 0.35:
+                add_sparkles(3, CYAN)
+            if random.random() < 0.2:
+                add_sparkles(2, BLUE)
+
+            show(strip)
+            time.sleep(0.02)
+
+        # -------------------------------------------------------
+        # VERSE 2 1:30-2:00
+        # Back to warm but slightly more energetic than verse 1
+        # -------------------------------------------------------
+        elif section == "verse2":
+            if beat_due:
+                beat_pulse(AMBER_DIM, GOLD)
+                last_beat_time = now
+                chase_step = (chase_step + 7) % total_leds
+
+            fill(AMBER_DIM)
+            for t in range(train_length):
+                pos = (total_leds - 1 - chase_step - t) % total_leds
+                strip[pos] = GOLD
+
+            if random.random() < 0.4:
+                add_sparkles(4, WHITE_DIM)
+            if random.random() < 0.15:
+                add_sparkles(2, CYAN)
+
+            show(strip)
+            time.sleep(0.02)
+
+        # -------------------------------------------------------
+        # CHORUS 2 2:00-2:30
+        # More intense than chorus 1, electric and blue join in
+        # -------------------------------------------------------
+        elif section == "chorus2":
+            if beat_due:
+                roll = random.random()
+                if roll < 0.3:
+                    beat_pulse(BLUE_DIM, WHITE)
+                elif roll < 0.6:
+                    beat_pulse(BLUE_DIM, CYAN)
+                else:
+                    beat_pulse(BLUE_DIM, ELECTRIC)
+                last_beat_time = now
+                chase_step = (chase_step + 10) % total_leds
+
+            fill(BLUE_DIM)
+            for t in range(train_length):
+                pos = (total_leds - 1 - chase_step - t) % total_leds
+                strip[pos] = ELECTRIC
+
+            if random.random() < 0.6:
+                add_sparkles(6, WHITE)
+            if random.random() < 0.45:
+                add_sparkles(4, CYAN)
+            if random.random() < 0.3:
+                add_sparkles(3, GOLD)
+
+            show(strip)
+            time.sleep(0.02)
+
+        # -------------------------------------------------------
+        # BRIDGE 2:30-3:00
+        # Slower, more minimal, breathing blue/cyan
+        # -------------------------------------------------------
+        elif section == "bridge":
+            progress  = (elapsed - T_BRIDGE) / (T_FINAL - T_BRIDGE)
+            breathing = 0.3 + 0.7 * (0.5 + 0.5 * math.sin(2 * math.pi * progress * 4))
+            val_b = int(180 * breathing)
+            val_g = int(80 * breathing)
+            fill((0, val_g, val_b))
+
+            if random.random() < 0.15:
+                add_sparkles(2, WHITE_DIM)
+
+            show(strip)
+            time.sleep(0.04)
+
+        # -------------------------------------------------------
+        # FINAL CHORUS 3:00-3:45
+        # Everything at maximum, all colors, peak chaos
+        # -------------------------------------------------------
+        elif section == "final":
+            if beat_due:
+                roll = random.random()
+                if roll < 0.25:
+                    fill(WHITE)
+                    show(strip)
+                    time.sleep(0.06)
+                elif roll < 0.5:
+                    beat_pulse(GOLD_DIM, CYAN)
+                elif roll < 0.75:
+                    beat_pulse(BLUE_DIM, GOLD)
+                else:
+                    beat_pulse(CYAN_DIM, WHITE)
+                last_beat_time = now
+                chase_step = (chase_step + 12) % total_leds
+
+            # Alternating base color for extra chaos
+            base_phase = int(elapsed * 2) % 2
+            fill(GOLD_DIM if base_phase == 0 else BLUE_DIM)
+
+            for t in range(train_length):
+                pos = (total_leds - 1 - chase_step - t) % total_leds
+                strip[pos] = WHITE
+
+            if random.random() < 0.7:
+                add_sparkles(8, WHITE)
+            if random.random() < 0.5:
+                add_sparkles(5, CYAN)
+            if random.random() < 0.4:
+                add_sparkles(4, GOLD)
+            if random.random() < 0.3:
+                add_sparkles(3, ELECTRIC)
+            if random.random() < 0.2:
+                add_sparkles(3, RED)
+
+            show(strip)
+            time.sleep(0.02)
+
+        # -------------------------------------------------------
+        # OUTRO 3:45-5:00
+        # Gradual fade, warm gold dying down to nothing
+        # -------------------------------------------------------
+        elif section == "outro":
+            progress   = (elapsed - T_OUTRO) / (T_END - T_OUTRO)  # 0.0 to 1.0
+            fade       = 1.0 - progress
+            breathing  = 0.5 + 0.5 * math.sin(2 * math.pi * elapsed * 0.4)
+            brightness = fade * (0.2 + 0.3 * breathing)
+
+            val_r = int(255 * brightness)
+            val_g = int(100 * brightness)
+            fill((val_r, val_g, 0))
+
+            if random.random() < 0.1 * fade:
+                add_sparkles(2, WHITE_DIM)
+
+            show(strip)
+            time.sleep(0.04)
+
 
