@@ -10,8 +10,8 @@ from enum import Enum
 import subprocess
 import sys
 
-from functions import play_flashing_lights, words_of_affirmation, readschedule, play_song, stop_song, take_picture
-
+#from functions import play_flashing_lights, words_of_affirmation, readschedule, play_song, stop_song, take_picture, calibrate
+import functions
 mp_hands = mp.solutions.hands
 mp_drawing = mp.solutions.drawing_utils
 
@@ -41,7 +41,9 @@ def get_finger_state(landmarks, handedness_label):
 
 def main():
     song_flag = False
-    cal_flag = False
+    calendar_flag = False
+    calibrated = False
+
     cap = cv2.VideoCapture(0)
     #cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)
     #cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
@@ -95,27 +97,31 @@ def main():
                     # Get finger state and display
                     finger_state = get_finger_state(hand_landmarks, label)
                     if finger_state == '01100':
-                        take_picture()
+                        functions.take_picture()
                         cv2.putText(frame, 'Picture Taken!', (10, 60), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0,255,255), 2)
 
                     if finger_state == '11111' and song_flag:
-                        stop_song()
+                        functions.stop_song()
                         song_flag = False
 
                     if finger_state == '11001' and not song_flag:
-                        play_song()
+                        functions.play_song()
                         song_flag = True
 
-                    if finger_state == '00110' and not cal_flag:
-                        readschedule()
-                        cal_flag = True
+                    if finger_state == '00110' and not calendar_flag:
+                        functions.readschedule()
+                        calendar_flag = True
 
                     if finger_state == '00111':
-                        words_of_affirmation()
+                        functions.words_of_affirmation()
 
                     if finger_state == '01001' and not song_flag:
-                        play_flashing_lights()
+                        functions.play_flashing_lights()
                         song_flag = True
+
+                    if finger_state == '10101' and not calibrated:
+                        calibrated = True
+                        functions.calibrate()
 
 
                     #cv2.putText(frame, finger_state, (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255,255,0), 2)

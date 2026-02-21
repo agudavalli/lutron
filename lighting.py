@@ -98,6 +98,10 @@ def breathe(color=(0, 100, 255), steps=100, loops=3):
             strip.show()
             time.sleep(0.01)
 
+def all_yellow():
+    strip.fill((255, 255, 0))
+    strip.show()
+
 
 # --- Run all tests in sequence ---
 
@@ -130,3 +134,5 @@ for line in sys.stdin:
         rainbow_cycle()
     elif line == 'breathe':
         breathe()
+    elif line == 'all_yellow':
+        all_yellow()
