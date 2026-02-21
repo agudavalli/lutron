@@ -84,6 +84,7 @@ def stop_song():
         _audio_process.terminate()
         _audio_process = None
     audio.play_mp3('what.mp3', True)
+    nether()
 
 def words_of_affirmation():
     phrase = random.randint(0,5)
