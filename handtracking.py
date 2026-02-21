@@ -60,6 +60,8 @@ def main():
     try:
         while True:
             ret, frame = cap.read()
+            frame = cv2.flip(frame, 0)  # Mirror for selfie view
+            frame = cv2.flip(frame, 1)
             if not ret:
                 break
 
