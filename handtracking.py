@@ -91,21 +91,22 @@ def main():
                         cv2.putText(frame, 'Picture Taken!', (10, 60), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0,255,255), 2)
 
                     if finger_state == '11111' and song_flag:
-                        stop_song()
+                        #stop_song()
                         song_flag = False
                     if finger_state == '11001' and not song_flag:
-                        play_song()
+                        #play_song()
                         song_flag = True
 
                     if finger_state == '00110' and not cal_flag:
-                        readschedule()
+                        #readschedule()
                         cal_flag = True
 
                     if finger_state == '00111':
-                        words_of_affirmation()
+                        # words_of_affirmation()
+                        pass
 
                     if finger_state == '01001' and not song_flag:
-                        play_flashing_lights()
+                        #play_flashing_lights()
                         song_flag = True
 
 
