@@ -27,61 +27,27 @@ def show(strip):
         strip[134 + i] = strip[i]
     strip.show()
 
-def photo_countdown(strip):
-    # Colors: (dim background, bright train)
-    phases = [
-        ((80, 0, 0),    (255, 0, 0)),    # red
-        ((80, 60, 0),   (255, 190, 0)),  # yellow
-        ((0, 80, 0),    (0, 255, 0)),    # green
-    ]
-
-    phase_duration = 1.2   # seconds per color phase (3 phases = 3.6s total)
-    train_length   = 3
-    total_leds     = 134   # visual LEDs 0-133
-
-    # Train travels clockwise = decreasing index (since LEDs go counterclockwise by index)
-    # One full rotation over all 3 phases combined
-    total_steps    = total_leds
-    total_time     = phase_duration * 3
-    step_delay     = total_time / total_steps
-
-    start_time = time.time()
-
-    for step in range(total_steps):
-        elapsed       = time.time() - start_time
-        phase_index   = min(int(elapsed / phase_duration), 2)
-        bg_color, train_color = phases[phase_index]
-
-        # Fill background
-        for i in range(total_leds):
-            strip[i] = bg_color
-
-        # Draw train (clockwise = decreasing index, wrapping)
-        for t in range(train_length):
-            pos = (total_leds - 1 - step - t) % total_leds
-            strip[pos] = train_color
-
+def camera_flash():
+    # Rapid white strobe then hold for the shot
+    for _ in range(6):
+        strip.fill((255, 255, 255))
         show(strip)
-
-        # Sleep until next step is due
-        next_step_time = start_time + (step + 1) * step_delay
-        sleep_time     = next_step_time - time.time()
-        if sleep_time > 0:
-            time.sleep(sleep_time)
-
-    # White rapid flash x4 over 0.75 seconds
-    flash_on_time  = 0.075
-    flash_off_time = 0.1125
-    for _ in range(4):
-        for i in range(total_leds):
-            strip[i] = (255, 255, 255)
+        time.sleep(0.05)
+        strip.fill((0, 0, 0))
         show(strip)
-        time.sleep(flash_on_time)
+        time.sleep(0.05)
 
-        for i in range(total_leds):
-            strip[i] = (0, 0, 0)
+    # Hold full white for the actual shot
+    strip.fill((255, 255, 255))
+    show(strip)
+    time.sleep(1.5)
+
+    # Fade out
+    for val in range(255, -1, -5):
+        strip.fill((val, val, val))
         show(strip)
-        time.sleep(flash_off_time)
+        time.sleep(0.01)
+
 
 # _______________________________________________ Words of affirmation rainbow
 
