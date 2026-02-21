@@ -10,18 +10,16 @@ from email import encoders
 from email.mime.base import MIMEBase
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+import flashinglights
+import subprocess
+import random
 
 
 def readschedule():
     file = 'test.mp3'
-    tts = gTTS(text="You have a meeting at 3 PM. Don't forget to prepare the presentation.", lang='en', slow=False)
+    tts = gTTS(text="You have your lutron presentation at 1pm, remember to finish the project", lang='en', slow=False)
     tts.save(file)
     os.system("afplay " + file)
-    return get_duration(file)
-
-def get_duration(file):
-    audio = MP3(file)
-    return audio.info.length
 
 def send_email():
     smtp_server = 'smtp.gmail.com'
@@ -53,8 +51,58 @@ def send_email():
 
 
 def take_picture(frame):
-    #TODO: Email the photos to the user
+    #TODO: Add call to lighting for all white LEDS
     filename = 'captured_image.jpg'
     cv2.imwrite(filename, frame)
     print(f"Image saved as {filename}")
     send_email()
+
+def play_song():
+    #TODO: Add lighting function
+    global _audio_process
+    song = random.randint(0,4)
+    filename = ''
+    if song == 0:
+        filename = 'lighters.mp3'
+    elif song == 1:
+        filename = 'flashinglights.mp3'
+        #light function
+    elif song == 2:
+        filename = 'allofthelights.mp3'
+    elif song == 3:
+        filename = 'blindinglights.mp3'
+    _audio_process = subprocess.Popen(['afplay', filename])
+
+def stop_song():
+    global _audio_process
+    if _audio_process is not None:
+        _audio_process.terminate()
+        _audio_process = None
+    os.system('afplay what.mp3')
+
+def words_of_affirmation():
+    phrase = random.randint(0,5)
+    if phrase == 0:
+        speech = "You are doing great, keep it up!"
+    elif phrase == 1:
+        speech = "You are a wonderful person, don't forget that!"
+    elif phrase == 2:
+        speech = "You are so smart, you can do anything you set your mind to!"
+    elif phrase == 3:
+        speech = "You are so kind, the world is a better place with you in it!"
+    elif phrase == 4:
+        speech = "You are so talented, you can achieve anything you want!"
+    tts = gTTS(text=speech, lang='en', slow=False)
+    filename = 'affirmation.mp3'
+    tts.save(filename)
+    os.system("afplay " + filename)
+
+def play_flashing_lights():
+    global _audio_process
+    filename = 'flashinglights.mp3'
+    _audio_process = subprocess.Popen(['afplay', filename])
+
+    #call lighting sequence here
+    flashinglights.flashing_lights_kanye()
+
+
