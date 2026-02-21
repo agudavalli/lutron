@@ -43,6 +43,7 @@ def main():
     song_flag = False
     calendar_flag = False
     calibrated = False
+    picture = False
 
     functions.boot_up()
     #functions.nether()
@@ -100,32 +101,39 @@ def main():
 
                     # Get finger state and display
                     finger_state = get_finger_state(hand_landmarks, label)
-                    if finger_state == '01100':
+                    if finger_state == '01100' and not picture:
                         functions.take_picture(frame)
                         cv2.putText(frame, 'Picture Taken!', (10, 60), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0,255,255), 2)
+                        picture = True
 
                     elif finger_state == '11111' and song_flag:
                         functions.stop_song()
                         song_flag = False
+                        picture = False
 
                     elif finger_state == '11001' and not song_flag:
                         functions.play_song()
                         song_flag = True
+                        picture = False
 
                     elif finger_state == '00110' and not calendar_flag:
                         functions.readschedule()
                         calendar_flag = True
+                        picture = False
 
                     elif finger_state == '00111':
                         functions.words_of_affirmation()
+                        picture = False
 
                     elif finger_state == '01001' and not song_flag:
                         functions.play_flashing_lights()
                         song_flag = True
+                        picture = False
 
                     elif finger_state == '10101' and not calibrated:
                         calibrated = True
                         functions.calibrate()
+                        picture = False
 
 
                     #cv2.putText(frame, finger_state, (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255,255,0), 2)
