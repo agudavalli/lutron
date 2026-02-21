@@ -107,7 +107,7 @@ def play_flashing_lights():
     filename = 'flashinglights.mp3'
     _audio_process = audio.play_mp3(filename)
 
-    send_command('all_red')
+    send_command('flashing_lights')
 
     #call lighting sequence here
     #flashinglightsv2.flashing_lights_kanye()
@@ -121,7 +121,7 @@ def nether():
 def boot_up():
     filename = 'intro.mp3'
     audio.play_mp3(filename, True)
-    send_command('power_on')
+    #send_command('power_on')
 
 
 def send_command(command):
