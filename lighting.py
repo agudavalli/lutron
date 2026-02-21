@@ -103,7 +103,9 @@ def all_yellow():
     strip.show()
 
 def nether():
-    strip.fill((97,0,178))
+    strip.fill((60,0,110))
+    #strip.fill((97,0,178))
+    #strip.fill((150,50,255))
     strip.show()
 
 
