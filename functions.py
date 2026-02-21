@@ -123,13 +123,18 @@ def boot_up():
 
 
 def send_command(command):
-    command_line = subprocess.Popen(
+    global _lighting_process
+    if _lighting_process is not None:
+        _lighting_process.terminate()
+        _lighting_process.wait()
+        _lighting_process = None
+    _lighting_process = subprocess.Popen(
     ["sudo", "python3", "lighting.py"],
     stdin=subprocess.PIPE,
     text=True
     )
-    command_line.stdin.write(command + "\n")
-    command_line.stdin.flush()
+    _lighting_process.stdin.write(command + "\n")
+    _lighting_process.stdin.flush()
 
 
 
