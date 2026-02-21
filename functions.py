@@ -22,7 +22,7 @@ def readschedule():
     file = 'test.mp3'
     tts = gTTS(text="You have your lutron presentation at 1pm, remember to finish the project", lang='en', slow=False)
     tts.save(file)
-    os.system("afplay " + file)
+    os.system("aplay " + file)
 
 def send_email():
     smtp_server = 'smtp.gmail.com'
@@ -77,14 +77,14 @@ def play_song():
         filename = 'allofthelights.mp3'
     elif song == 3:
         filename = 'blindinglights.mp3'
-    _audio_process = subprocess.Popen(['afplay', filename])
+    _audio_process = subprocess.Popen(['aplay', filename])
 
 def stop_song():
     global _audio_process
     if _audio_process is not None:
         _audio_process.terminate()
         _audio_process = None
-    os.system('afplay what.mp3')
+    os.system('aplay what.mp3')
 
 def words_of_affirmation():
     phrase = random.randint(0,5)
@@ -101,12 +101,12 @@ def words_of_affirmation():
     tts = gTTS(text=speech, lang='en', slow=False)
     filename = 'affirmation.mp3'
     tts.save(filename)
-    os.system("afplay " + filename)
+    os.system("aplay " + filename)
 
 def play_flashing_lights():
     global _audio_process
     filename = 'flashinglights.mp3'
-    _audio_process = subprocess.Popen(['afplay', filename])
+    _audio_process = subprocess.Popen(['aplay', filename])
 
     send_command('all_red')
 
