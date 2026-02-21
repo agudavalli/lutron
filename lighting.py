@@ -163,5 +163,7 @@ for line in sys.stdin:
         leofunctions.gamecube_intro(strip)
     elif line == 'blinding_lights':
         leofunctions.blinding_lights_weeknd(strip)
+    elif line == 'cmajor':
+        leofunctions.piano_scale_egg(strip)
 
 

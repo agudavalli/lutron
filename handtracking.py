@@ -141,6 +141,10 @@ def main():
                         picture = False
                         calendar_flag = False
 
+                    elif finger_state == '00100':
+                        functions.cmajor()
+                        picture = False
+
 
                     #cv2.putText(frame, finger_state, (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255,255,0), 2)
 
