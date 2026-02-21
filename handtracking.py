@@ -10,6 +10,8 @@ from enum import Enum
 import subprocess
 import sys
 
+from functions import play_flashing_lights, words_of_affirmation, readschedule, play_song, stop_song
+
 mp_hands = mp.solutions.hands
 mp_drawing = mp.solutions.drawing_utils
 
@@ -103,21 +105,21 @@ def main():
                         cv2.putText(frame, 'Picture Taken!', (10, 60), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0,255,255), 2)
 
                     if finger_state == '11111' and song_flag:
-                        send_command('stop_song')
+                        stop_song()
                         song_flag = False
                     if finger_state == '11001' and not song_flag:
-                        send_command('play_song')
+                        play_song()
                         song_flag = True
 
                     if finger_state == '00110' and not cal_flag:
-                        send_command('readschedule')
+                        readschedule()
                         cal_flag = True
 
                     if finger_state == '00111':
-                        send_command('words_of_affirmation')
+                        words_of_affirmation()
 
                     if finger_state == '01001' and not song_flag:
-                        send_command('flashing_lights')
+                        play_flashing_lights()
                         song_flag = True
 
 
