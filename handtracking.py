@@ -82,13 +82,13 @@ def main():
                     label = handedness.classification[0].label
                     if label == 'Left':
                         continue  # Skip left hand for now
-                    mp_drawing.draw_landmarks(
+                    '''mp_drawing.draw_landmarks(
                         frame,
                         hand_landmarks,
                         mp_hands.HAND_CONNECTIONS,
                         mp_drawing.DrawingSpec(color=(0,255,0), thickness=2, circle_radius=3),
                         mp_drawing.DrawingSpec(color=(0,0,255), thickness=2, circle_radius=2),
-                    )
+                    )'''
 
 
 
@@ -97,7 +97,7 @@ def main():
                     h, w, _ = frame.shape
                     cx, cy = int(wrist.x * w), int(wrist.y * h)
                     label = handedness.classification[0].label
-                    cv2.putText(frame, label, (cx + 10, cy + 10), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255,255,255), 2)
+                    #cv2.putText(frame, label, (cx + 10, cy + 10), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255,255,255), 2)
 
                     # Get finger state and display
                     finger_state = get_finger_state(hand_landmarks, label)
