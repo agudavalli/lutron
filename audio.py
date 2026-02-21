@@ -15,7 +15,7 @@ def _find_player(preferred: Optional[str] = None) -> Optional[str]:
         seen.add(c)
     return None
 
-def play_mp3(path: str, blocking: bool = False, player: Optional[str] = None, volume: Optional[float] = None):
+def play_mp3(path: str, blocking: bool = False, player: Optional[str] = 'mpg123', volume: Optional[float] = None):
     """
     Play an MP3 file on a Raspberry Pi.
     - path: path to mp3 file

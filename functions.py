@@ -105,7 +105,7 @@ def words_of_affirmation():
 def play_flashing_lights():
     global _audio_process
     filename = 'flashinglights.mp3'
-    _audio_process = subprocess.Popen(['aplay', filename])
+    _audio_process = audio.play_mp3(filename)
 
     send_command('all_red')
 
