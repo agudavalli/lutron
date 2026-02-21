@@ -214,7 +214,6 @@ def piano_scale_egg(strip):
     import random
 
     # --- Adjustable timing ---
-    time.sleep(4)
     BPM           = 153  # adjust to match video
     note_duration = 60 / BPM  # seconds per note
 
@@ -224,8 +223,8 @@ def piano_scale_egg(strip):
     CORNER_BR     = 124
     total_leds    = 134
 
-    # --- C major scale up then down, 15 notes total ---
-    # Each color maps to a scale degree, consistent up and down
+    # --- C major scale 2 octaves up then down, 29 notes total ---
+    # Each color maps to a scale degree, consistent across octaves
     note_colors = {
         'C':  (255, 50, 50),    # warm red
         'D':  (255, 140, 0),    # orange
@@ -236,16 +235,11 @@ def piano_scale_egg(strip):
         'B':  (160, 0, 255),    # violet
     }
 
-    # Scale sequence: up then down
-    scale_sequence = ['C','D','E','F','G','A','B','C','B','A','G','F','E','D','C']
+    # Scale sequence: 2 octaves up then down
+    scale_sequence = ['C','D','E','F','G','A','B','C','D','E','F','G','A','B','C',
+                      'B','A','G','F','E','D','C','B','A','G','F','E','D','C']
 
-    # --- Determine drip paths ---
-    # Clockwise from top center to bottom right corner
-    # LEDs go counterclockwise by index, so clockwise = decreasing index
-    # From TOP_CENTER (44) decreasing to CORNER_BR (124) wrapping around
-    # Counterclockwise from top center to bottom left corner = increasing index
-
-    # Right drip: from 44 decreasing -> 31 (top right) -> 0 -> 134 -> 124 (bottom right)
+    # Right drip: clockwise from top center (44) down to bottom right corner (124)
     right_path = []
     i = TOP_CENTER
     while True:
@@ -254,7 +248,7 @@ def piano_scale_egg(strip):
             break
         i = (i - 1) % total_leds
 
-    # Left drip: from 44 increasing -> 57 (top left) -> 98 (bottom left)
+    # Left drip: counterclockwise from top center (44) down to bottom left corner (98)
     left_path = []
     i = TOP_CENTER
     while True:
@@ -263,28 +257,13 @@ def piano_scale_egg(strip):
             break
         i = (i + 1) % total_leds
 
-    drip_length = max(len(right_path), len(left_path))
-
     def fill_base():
-        # Start all LEDs white
         for i in range(total_leds):
             strip[i] = (255, 255, 255)
-
-    def flash_corners(color):
-        # Flash bottom corners with drip color
-        strip[CORNER_BL] = color
-        strip[CORNER_BR] = color
-        show(strip)
-        time.sleep(0.08)
-        strip[CORNER_BL] = (255, 255, 255)
-        strip[CORNER_BR] = (255, 255, 255)
-        show(strip)
 
     # --- Initialize strip to white ---
     fill_base()
     show(strip)
-
-    start_time = time.time()
 
     for note_index, note_name in enumerate(scale_sequence):
         color        = note_colors[note_name]
@@ -294,12 +273,11 @@ def piano_scale_egg(strip):
         right_corner_flashed = False
         left_corner_flashed  = False
 
-        # How many steps does this drip take
         right_steps = len(right_path)
         left_steps  = len(left_path)
         max_steps   = max(right_steps, left_steps)
 
-        # Step delay so drip reaches corners exactly in one note duration
+        # Step delay so drip reaches corners in exactly one note duration
         step_delay = note_duration / max_steps
 
         for step in range(max_steps):
@@ -338,11 +316,10 @@ def piano_scale_egg(strip):
             if sleep_time > 0:
                 time.sleep(sleep_time)
 
-    # Hold final state briefly then fade to white
+    # Hold final state briefly then return to white
     time.sleep(0.5)
     fill_base()
     show(strip)
-
 # ______________________________________________________________________
 # Flashing Lights - Kanye West
 
