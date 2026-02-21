@@ -102,6 +102,10 @@ def all_yellow():
     strip.fill((255, 255, 0))
     strip.show()
 
+def nether():
+    strip.fill((94,28,158))
+    strip.show()
+
 
 # --- Run all tests in sequence ---
 
@@ -136,3 +140,5 @@ for line in sys.stdin:
         breathe()
     elif line == 'all_yellow':
         all_yellow()
+    elif line == 'nether':
+        nether()

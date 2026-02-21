@@ -116,6 +116,9 @@ def play_flashing_lights():
 def calibrate():
     send_command('all_yellow')
 
+def nether():
+    send_command('nether')
+
 
 
 def send_command(command):
