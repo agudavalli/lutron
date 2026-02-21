@@ -14,6 +14,7 @@ from email.mime.text import MIMEText
 import subprocess
 import random
 import sys
+import audio
 
 #import flashinglightsv2
 
@@ -75,7 +76,7 @@ def play_song():
         filename = 'allofthelights.mp3'
     elif song == 3:
         filename = 'blindinglights.mp3'
-    _audio_process = subprocess.Popen(['aplay', filename])
+    _audio_process = audio.play_mp3(filename)
 
 def stop_song():
     global _audio_process
