@@ -10,7 +10,7 @@ BRIGHTNESS = 0.4
 
 strip = neopixel.NeoPixel(board.D18, NUM_LEDS, brightness=BRIGHTNESS, auto_write=False)
 
-# ___________________________________ Camera
+# _________________________________________ Camera
 
 # Corner references (for future patterns):
 # Bottom right: 134, Bottom left: 98, Top left: 57, Top right: 31
@@ -82,3 +82,74 @@ def photo_countdown(strip):
             strip[i] = (0, 0, 0)
         show(strip)
         time.sleep(flash_off_time)
+
+# _______________________________________________ Words of affirmation rainbow
+
+def affirmation_rainbow(strip):
+    duration = 10  # seconds, adjust as needed
+
+    total_leds = 134
+    band_width = 5
+
+    # 7 rainbow colors in discrete bands
+    rainbow_colors = [
+        (255, 0, 0),    # red
+        (255, 60, 0),   # orange
+        (255, 220, 0),  # yellow
+        (0, 255, 0),    # green
+        (0, 100, 255),  # blue
+        (80, 0, 255),   # indigo
+        (200, 0, 255),  # violet
+    ]
+
+    total_colors = len(rainbow_colors)
+    pattern_length = total_colors * band_width  # 35 LEDs = one full rainbow cycle
+
+    step_delay = 0.5  # seconds per 1 LED shift clockwise, adjust for speed
+    total_steps = int(duration / step_delay)
+
+    for step in range(total_steps):
+        for i in range(total_leds):
+            # Clockwise = shift offset increases over time
+            # Reverse index for clockwise direction
+            pos = (total_leds - 1 - i + step) % pattern_length
+            color_index = (pos // band_width) % total_colors
+            strip[i] = rainbow_colors[color_index]
+
+        show(strip)
+        time.sleep(step_delay)
+
+    # Leave strip dark on exit
+    for i in range(total_leds):
+        strip[i] = (0, 0, 0)
+    show(strip)
+
+# ___________________________________________________________
+# Calendar Breathing White
+
+def calendar_breathing(strip):
+    duration = 10  # seconds, adjust as needed
+
+    total_leds = 134
+    breath_period = 3  # seconds per full breath cycle, adjust as needed
+
+    start_time = time.time()
+
+    while time.time() - start_time < duration:
+        elapsed = time.time() - start_time
+
+        # Sine wave oscillates -1 to 1, shift and scale to 0.2-1.0 brightness range
+        brightness = 0.6 + 0.4 * math.sin(2 * math.pi * elapsed / breath_period)
+        # 0.6 center + 0.4 amplitude gives range of 0.2 to 1.0
+
+        val = int(255 * brightness)
+        for i in range(total_leds):
+            strip[i] = (val, val, val)
+
+        show(strip)
+        time.sleep(0.05)  # 20fps update rate, smooth enough for a slow fade
+
+    # Leave strip dark on exit
+    for i in range(total_leds):
+        strip[i] = (0, 0, 0)
+    show(strip)
