@@ -212,6 +212,7 @@ def gamecube_intro(strip):
 
 def piano_scale_egg(strip):
     import random
+    time.sleep(3.8)
 
     # --- Adjustable timing ---
     BPM           = 153  # adjust to match video
