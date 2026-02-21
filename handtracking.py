@@ -6,7 +6,7 @@ import time
 import cv2
 import mediapipe as mp
 from enum import Enum
-from functions import readschedule, take_picture, stop_song, play_song, words_of_affirmation, play_flashing_lights
+#from functions import readschedule, take_picture, stop_song, play_song, words_of_affirmation, play_flashing_lights
 
 mp_hands = mp.solutions.hands
 mp_drawing = mp.solutions.drawing_utils
@@ -87,7 +87,7 @@ def main():
                     # Get finger state and display
                     finger_state = get_finger_state(hand_landmarks, label)
                     if finger_state == '01100':
-                        take_picture(frame)
+                        #take_picture(frame)
                         cv2.putText(frame, 'Picture Taken!', (10, 60), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0,255,255), 2)
 
                     if finger_state == '11111' and song_flag:
