@@ -46,7 +46,7 @@ def main():
     picture = False
 
     functions.boot_up()
-    #functions.nether()
+    functions.nether()
 
 
     cap = cv2.VideoCapture(0)

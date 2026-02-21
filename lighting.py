@@ -5,7 +5,7 @@ import neopixel
 import time
 import math
 from flashinglights import flashing_lights_kanye
-from mirrorpoweron import boot_sequence
+#from mirrorpoweron import boot_sequence
 
 NUM_LEDS   = 160
 BRIGHTNESS = 0.4
