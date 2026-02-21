@@ -23,6 +23,7 @@ _lighting_process = None
 
 
 def readschedule():
+    send_command('calendar')
     file = 'test.mp3'
     tts = gTTS(text="You have your lutron presentation at 1pm, remember to finish the project", lang='en', slow=False)
     tts.save(file)
