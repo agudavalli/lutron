@@ -1,3 +1,5 @@
+import sys
+
 import board
 import neopixel
 import time
@@ -110,4 +112,21 @@ def run_all_tests():
     print("Done!"); all_off()
 
 
-run_all_tests()
+for line in sys.stdin:
+    line = line.strip()
+    if line == 'all_red':
+        all_red()
+    elif line == 'all_white':
+        all_white()
+    elif line == 'all_off':
+        all_off()
+    elif line == 'section_test':
+        section_test()
+    elif line == 'chase':
+        chase()
+    elif line == 'theater_chase':
+        theater_chase()
+    elif line == 'rainbow_cycle':
+        rainbow_cycle()
+    elif line == 'breathe':
+        breathe()

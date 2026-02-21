@@ -108,8 +108,21 @@ def play_flashing_lights():
     filename = 'flashinglights.mp3'
     _audio_process = subprocess.Popen(['afplay', filename])
 
+    send_command('all_red')
+
     #call lighting sequence here
     #flashinglightsv2.flashing_lights_kanye()
+
+
+
+def send_command(command):
+    command_line = subprocess.Popen(
+    ["sudo", "python3", "lighting.py"],
+    stdin=subprocess.PIPE,
+    text=True
+    )
+    command_line.stdin.write(command + "\n")
+    command_line.stdin.flush()
 
 
 
