@@ -59,6 +59,7 @@ def send_email():
 
 def take_picture(frame):
     #TODO: Add call to lighting for all white LEDS
+    send_command('camera')
     audio.play_mp3('camera.mp3')
     filename = 'captured_image.jpg'
     cv2.imwrite(filename, frame)
@@ -68,17 +69,18 @@ def take_picture(frame):
 def play_song():
     #TODO: Add lighting function
     global _audio_process
-    song = random.randint(0,4)
+    song = random.randint(1,4)
     filename = ''
-    if song == 0:
-        filename = 'lights.mp3'
-    elif song == 1:
+    if song == 1:
         filename = 'flashinglights.mp3'
         #light function
+        send_command('flashing_lights')
     elif song == 2:
         filename = 'allofthelights.mp3'
+        send_command('all_of_the_lights')
     elif song == 3:
         filename = 'blindinglights.mp3'
+        send_command('blinding_lights')
     _audio_process = audio.play_mp3(filename)
 
 def stop_song():
@@ -90,6 +92,7 @@ def stop_song():
     nether()
 
 def words_of_affirmation():
+    send_command('affirmation')
     phrase = random.randint(0,5)
     if phrase == 0:
         speech = "You are doing great, keep it up!"

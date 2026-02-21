@@ -5,6 +5,7 @@ import neopixel
 import time
 import math
 from flashinglights import flashing_lights_kanye
+import leofunctions
 #from mirrorpoweron import boot_sequence
 
 NUM_LEDS   = 160
@@ -149,5 +150,11 @@ for line in sys.stdin:
         nether()
     elif line == 'flashing_lights':
         flashing_lights_kanye()
-    '''elif line == 'power_on':
-        boot_sequence()'''
+    elif line == 'camera':
+        leofunctions.photo_countdown(strip)
+    elif line == 'affirmation':
+        leofunctions.affirmation_rainbow(strip)
+    elif line == 'calendar':
+        leofunctions.calendar_breathing(strip)
+
+
