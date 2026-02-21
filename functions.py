@@ -127,7 +127,7 @@ def nether():
 def boot_up():
     filename = 'intro.mp3'
     audio.play_mp3(filename, True)
-    #send_command('power_on')
+    send_command('intro')
 
 
 def send_command(command):

@@ -156,5 +156,11 @@ for line in sys.stdin:
         leofunctions.affirmation_rainbow(strip)
     elif line == 'calendar':
         leofunctions.calendar_breathing(strip)
+    elif line == 'all_of_the_lights':
+        leofunctions.all_of_the_lights_kanye(strip)
+    elif line == 'intro':
+        leofunctions.gamecube_intro(strip)
+    elif line == 'blinding_lights':
+        leofunctions.blinding_lights_weeknd(strip)
 
 
