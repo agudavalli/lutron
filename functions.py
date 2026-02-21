@@ -53,12 +53,10 @@ def send_email():
 
 
 
-def take_picture():
+def take_picture(frame):
     #TODO: Add call to lighting for all white LEDS
 
     filename = 'captured_image.jpg'
-    cam = cv2.VideoCapture(0)
-    ret, frame = cam.read()
     cv2.imwrite(filename, frame)
     print(f"Image saved as {filename}")
     send_email()
