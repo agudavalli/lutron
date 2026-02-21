@@ -151,7 +151,7 @@ for line in sys.stdin:
     elif line == 'flashing_lights':
         flashing_lights_kanye()
     elif line == 'camera':
-        leofunctions.photo_countdown(strip)
+        leofunctions.camera_flash(strip)
     elif line == 'affirmation':
         leofunctions.affirmation_rainbow(strip)
     elif line == 'calendar':

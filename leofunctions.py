@@ -27,7 +27,7 @@ def show(strip):
         strip[134 + i] = strip[i]
     strip.show()
 
-def camera_flash():
+def camera_flash(strip):
     # Rapid white strobe then hold for the shot
     for _ in range(6):
         strip.fill((255, 255, 255))
