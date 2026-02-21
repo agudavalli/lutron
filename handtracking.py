@@ -44,6 +44,7 @@ def main():
     calendar_flag = False
     calibrated = False
     picture = False
+    cmajor = True
 
     functions.boot_up()
     functions.nether()
@@ -141,9 +142,10 @@ def main():
                         picture = False
                         calendar_flag = False
 
-                    elif finger_state == '00100':
+                    elif finger_state == '00100' and cmajor:
                         functions.cmajor()
                         picture = False
+                        cmajor = False
 
 
                     #cv2.putText(frame, finger_state, (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255,255,0), 2)
