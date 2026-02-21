@@ -119,6 +119,11 @@ def calibrate():
 def nether():
     send_command('nether')
 
+def boot_up():
+    file = 'bootup.mp3'
+    tts = gTTS(text="Booting up", lang='en', slow=False)
+    tts.save(file)
+    os.system("aplay " + file)
 
 
 def send_command(command):
