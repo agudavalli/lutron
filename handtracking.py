@@ -53,15 +53,9 @@ def main():
         min_tracking_confidence=0.5,
     )
 
-    command_line = subprocess.Popen(
-    ["sudo", "python3", "neopixel_controller.py"],
-    stdin=subprocess.PIPE,
-    text=True
-    )
-
-    def send_command(command):
-        command_line.stdin.write(command + "\n")
-        command_line.stdin.flush()
+    #def send_command(command):
+     #   command_line.stdin.write(command + "\n")
+      #  command_line.stdin.flush()
 
     try:
         while True:
