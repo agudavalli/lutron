@@ -70,7 +70,7 @@ def take_picture(frame):
 def play_song():
     #TODO: Add lighting function
     global _audio_process
-    song = random.randint(1,4)
+    song = random.randint(1,3)
     filename = ''
     if song == 1:
         filename = 'flashinglights.mp3'
@@ -128,6 +128,11 @@ def nether():
 def boot_up():
     send_command('intro')
     filename = 'intro.mp3'
+    audio.play_mp3(filename, True)
+
+def cmajor():
+    send_command('cmajor')
+    filename = 'cmajor.mp3'
     audio.play_mp3(filename, True)
 
 
