@@ -339,6 +339,3 @@ def flashing_lights_kanye():
 
     print("Done — lights out.")
     all_off()
-
-
-flashing_lights_kanye()
