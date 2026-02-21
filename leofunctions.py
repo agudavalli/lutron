@@ -120,6 +120,93 @@ def calendar_breathing(strip):
         strip[i] = (0, 0, 0)
     show(strip)
 
+# __________________________
+# GameCube Intro
+
+def gamecube_intro(strip):
+    import random
+
+    total_leds = 134
+    duration   = 7.0  # seconds total
+    train_length = 4
+
+    # --- Color palette for trail ---
+    trail_colors = [
+        (180, 0, 255),  # bright purple
+        (140, 0, 200),  # mid purple
+        (100, 0, 180),  # deep purple
+        (200, 0, 180),  # purple-pink
+        (255, 0, 180),  # hot pink-purple
+        (220, 0, 140),  # pink
+        (180, 0, 120),  # deep pink
+        (255, 0, 220),  # light magenta
+    ]
+
+    TRAIN_COLOR = (220, 100, 255)  # bright leading purple
+    OFF         = (0, 0, 0)
+
+    # Train completes exactly one full loop in 7 seconds
+    # Clockwise = decreasing index
+    loop_steps  = total_leds
+    step_delay  = (duration * 0.65) / loop_steps  # 65% of time for loop, rest for shimmer
+    shimmer_duration = duration * 0.35
+
+    # Track what color each LED was assigned as train passes
+    trail = [OFF] * total_leds
+
+    def fill(color):
+        for i in range(total_leds):
+            strip[i] = color
+
+    # --- Phase 1: train sweeps clockwise leaving colored trail ---
+    start_time = time.time()
+
+    for step in range(loop_steps):
+        # Assign a random trail color to the LED the train just left
+        trail[( total_leds - 1 - step) % total_leds] = random.choice(trail_colors)
+
+        # Draw trail
+        for i in range(total_leds):
+            strip[i] = trail[i]
+
+        # Draw train on top
+        for t in range(train_length):
+            pos = (total_leds - 1 - step - t) % total_leds
+            strip[pos] = TRAIN_COLOR
+
+        show(strip)
+
+        # Drift timing to avoid accumulation
+        next_step_time = start_time + (step + 1) * step_delay
+        sleep_time = next_step_time - time.time()
+        if sleep_time > 0:
+            time.sleep(sleep_time)
+
+    # --- Phase 2: shimmer/sparkle over the filled frame ---
+    shimmer_start = time.time()
+
+    while time.time() - shimmer_start < shimmer_duration:
+        # Restore trail base
+        for i in range(total_leds):
+            strip[i] = trail[i]
+
+        # Random sparkles from palette plus bright white flickers
+        sparkle_count = random.randint(4, 10)
+        for _ in range(sparkle_count):
+            pos   = random.randint(0, total_leds - 1)
+            if random.random() < 0.3:
+                strip[pos] = (255, 255, 255)  # occasional white flash
+            else:
+                strip[pos] = random.choice(trail_colors)
+
+        show(strip)
+        time.sleep(0.07)
+
+    # Leave strip in filled state on exit for clean transition
+    for i in range(total_leds):
+        strip[i] = trail[i]
+    show(strip)
+
 # ______________________________________________________________________
 # Flashing Lights - Kanye West
 
@@ -681,4 +768,247 @@ def all_of_the_lights_kanye(strip):
             show(strip)
             time.sleep(0.04)
 
+# _____________________________________________________________
+# Blinding Lights - The Weeknd
 
+def blinding_lights_weeknd(strip):
+    import random
+
+    total_leds = 134
+    BPM = 85.5
+    beat_interval = 60 / BPM  # ~0.702 seconds per beat
+
+    # --- Color palette ---
+    PINK_DIM      = (60, 0, 30)
+    PINK_MID      = (180, 0, 80)
+    PINK_BRIGHT   = (255, 0, 100)
+    MAGENTA       = (255, 0, 180)
+    MAGENTA_DIM   = (50, 0, 40)
+    RED_DEEP      = (180, 0, 40)
+    RED_DIM       = (40, 0, 10)
+    WHITE         = (255, 255, 255)
+    WHITE_DIM     = (60, 60, 60)
+    HOT_PINK      = (255, 20, 120)
+    OFF           = (0, 0, 0)
+
+    # --- Timestamps ---
+    T_BUILD       = 10.0
+    T_VERSE1      = 30.0
+    T_CHORUS1     = 60.0
+    T_VERSE2      = 105.0
+    T_CHORUS2     = 135.0
+    T_OUTRO       = 180.0
+    T_END         = 200.0
+
+    def fill(color):
+        for i in range(total_leds):
+            strip[i] = color
+
+    def add_sparkles(count, color=WHITE):
+        for _ in range(count):
+            pos = random.randint(0, total_leds - 1)
+            strip[pos] = color
+
+    def beat_pulse(base_color, bright_color):
+        fill(bright_color)
+        show(strip)
+        time.sleep(0.07)
+        fill(base_color)
+
+    def get_section(t):
+        if t < T_BUILD:   return "open"
+        if t < T_VERSE1:  return "build"
+        if t < T_CHORUS1: return "verse1"
+        if t < T_VERSE2:  return "chorus1"
+        if t < T_CHORUS2: return "verse2"
+        if t < T_OUTRO:   return "chorus2"
+        if t < T_END:     return "outro"
+        return "done"
+
+    start_time     = time.time()
+    last_beat_time = start_time
+    chase_step     = 0
+    train_length   = 4
+
+    while True:
+        now     = time.time()
+        elapsed = now - start_time
+        section = get_section(elapsed)
+
+        if section == "done":
+            fill(OFF)
+            show(strip)
+            break
+
+        beat_due = (now - last_beat_time) >= beat_interval
+
+        # -------------------------------------------------------
+        # OPEN 0:00-0:10
+        # Slow neon pink atmosphere, just a gentle pulse
+        # -------------------------------------------------------
+        if section == "open":
+            progress   = elapsed / T_BUILD
+            breathing  = 0.2 + 0.4 * math.sin(math.pi * progress * 1.5)
+            val_r = int(180 * breathing)
+            val_b = int(60 * breathing)
+            fill((val_r, 0, val_b))
+            show(strip)
+            time.sleep(0.04)
+
+        # -------------------------------------------------------
+        # BUILD 0:10-0:30
+        # Chase train spins up, magenta and deep red brightening
+        # -------------------------------------------------------
+        elif section == "build":
+            progress = (elapsed - T_BUILD) / (T_VERSE1 - T_BUILD)  # 0.0 to 1.0
+
+            # Train speeds up gradually through the build
+            if beat_due:
+                last_beat_time = now
+                chase_step = (chase_step + 5) % total_leds
+
+            # Background brightens from dim red to mid pink
+            bg_r = int(40 + 140 * progress)
+            bg_b = int(10 + 70 * progress)
+            fill((bg_r, 0, bg_b))
+
+            # Train color shifts from deep red to magenta
+            train_r = 180
+            train_g = 0
+            train_b = int(40 + 140 * progress)
+            for t in range(train_length):
+                pos = (total_leds - 1 - chase_step - t) % total_leds
+                strip[pos] = (train_r, train_g, train_b)
+
+            # Occasional early sparkles appearing more as build progresses
+            if random.random() < 0.2 * progress:
+                add_sparkles(2, WHITE_DIM)
+
+            show(strip)
+            time.sleep(0.03)
+
+        # -------------------------------------------------------
+        # VERSE 1 0:30-1:00
+        # 85.5bpm beat pulse, neon pink base, train locked to beat
+        # -------------------------------------------------------
+        elif section == "verse1":
+            if beat_due:
+                beat_pulse(PINK_DIM, PINK_BRIGHT)
+                last_beat_time = now
+                chase_step = (chase_step + 7) % total_leds
+
+            fill(PINK_DIM)
+            for t in range(train_length):
+                pos = (total_leds - 1 - chase_step - t) % total_leds
+                strip[pos] = MAGENTA
+
+            if random.random() < 0.25:
+                add_sparkles(2, WHITE_DIM)
+
+            show(strip)
+            time.sleep(0.02)
+
+        # -------------------------------------------------------
+        # CHORUS 1 1:00-1:45
+        # Brighter, faster chase, hot pink and white sparkles
+        # -------------------------------------------------------
+        elif section == "chorus1":
+            if beat_due:
+                if random.random() < 0.3:
+                    beat_pulse(MAGENTA_DIM, WHITE)
+                else:
+                    beat_pulse(MAGENTA_DIM, HOT_PINK)
+                last_beat_time = now
+                chase_step = (chase_step + 10) % total_leds
+
+            fill(MAGENTA_DIM)
+            for t in range(train_length):
+                pos = (total_leds - 1 - chase_step - t) % total_leds
+                strip[pos] = HOT_PINK
+
+            if random.random() < 0.5:
+                add_sparkles(4, WHITE)
+            if random.random() < 0.3:
+                add_sparkles(3, PINK_BRIGHT)
+
+            show(strip)
+            time.sleep(0.02)
+
+        # -------------------------------------------------------
+        # VERSE 2 1:45-2:15
+        # Back to verse energy, slightly warmer than verse 1
+        # -------------------------------------------------------
+        elif section == "verse2":
+            if beat_due:
+                beat_pulse(RED_DIM, PINK_BRIGHT)
+                last_beat_time = now
+                chase_step = (chase_step + 7) % total_leds
+
+            fill(RED_DIM)
+            for t in range(train_length):
+                pos = (total_leds - 1 - chase_step - t) % total_leds
+                strip[pos] = RED_DEEP
+
+            if random.random() < 0.3:
+                add_sparkles(3, WHITE_DIM)
+            if random.random() < 0.15:
+                add_sparkles(2, PINK_MID)
+
+            show(strip)
+            time.sleep(0.02)
+
+        # -------------------------------------------------------
+        # CHORUS 2 2:15-3:00
+        # Most intense, white flashes on beat, full neon chaos
+        # -------------------------------------------------------
+        elif section == "chorus2":
+            if beat_due:
+                roll = random.random()
+                if roll < 0.3:
+                    fill(WHITE)
+                    show(strip)
+                    time.sleep(0.06)
+                elif roll < 0.6:
+                    beat_pulse(MAGENTA_DIM, HOT_PINK)
+                else:
+                    beat_pulse(PINK_DIM, WHITE)
+                last_beat_time = now
+                chase_step = (chase_step + 12) % total_leds
+
+            # Alternating base for extra drive
+            base_phase = int(elapsed * 2.5) % 2
+            fill(MAGENTA_DIM if base_phase == 0 else RED_DIM)
+
+            for t in range(train_length):
+                pos = (total_leds - 1 - chase_step - t) % total_leds
+                strip[pos] = WHITE
+
+            if random.random() < 0.65:
+                add_sparkles(6, WHITE)
+            if random.random() < 0.45:
+                add_sparkles(4, HOT_PINK)
+            if random.random() < 0.3:
+                add_sparkles(3, MAGENTA)
+
+            show(strip)
+            time.sleep(0.02)
+
+        # -------------------------------------------------------
+        # OUTRO 3:00-3:20
+        # Gradual fade, dim pink pulse dying to dark
+        # -------------------------------------------------------
+        elif section == "outro":
+            progress   = (elapsed - T_OUTRO) / (T_END - T_OUTRO)
+            fade       = 1.0 - progress
+            breathing  = 0.5 + 0.5 * math.sin(2 * math.pi * elapsed * 0.5)
+            brightness = fade * (0.2 + 0.3 * breathing)
+
+            val_r = int(255 * brightness)
+            val_b = int(100 * brightness)
+            fill((val_r, 0, val_b))
+
+            if random.random() < 0.1 * fade:
+                add_sparkles(2, WHITE_DIM)
+
+            show(strip)
+            time.sleep(0.04)
