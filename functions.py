@@ -95,7 +95,7 @@ def stop_song():
 
 def words_of_affirmation():
     send_command('affirmation')
-    phrase = random.randint(0,5)
+    phrase = random.randint(0,4)
     speech = ''
     if phrase == 0:
         speech = "You are doing great, keep it up!"
