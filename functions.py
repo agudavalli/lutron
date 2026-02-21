@@ -69,7 +69,7 @@ def play_song():
     song = random.randint(0,4)
     filename = ''
     if song == 0:
-        filename = 'lighters.mp3'
+        filename = 'lights.mp3'
     elif song == 1:
         filename = 'flashinglights.mp3'
         #light function
