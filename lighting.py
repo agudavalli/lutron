@@ -147,7 +147,7 @@ for line in sys.stdin:
         all_yellow()
     elif line == 'nether':
         nether()
-    elif line == 'power_on':
-        boot_sequence()
     elif line == 'flashing_lights':
         flashing_lights_kanye()
+    '''elif line == 'power_on':
+        boot_sequence()'''
