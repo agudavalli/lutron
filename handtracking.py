@@ -6,7 +6,7 @@ import time
 import cv2
 import mediapipe as mp
 from enum import Enum
-#from functions import readschedule, take_picture, stop_song, play_song, words_of_affirmation, play_flashing_lights
+from functions import readschedule, take_picture, stop_song, play_song, words_of_affirmation, play_flashing_lights
 
 mp_hands = mp.solutions.hands
 mp_drawing = mp.solutions.drawing_utils
@@ -56,7 +56,7 @@ def main():
                 break
 
             # Flip for selfie view and convert color
-            frame = cv2.flip(frame, 1)
+            #frame = cv2.flip(frame, 1)
             rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 
             results = hands.process(rgb)
@@ -87,26 +87,25 @@ def main():
                     # Get finger state and display
                     finger_state = get_finger_state(hand_landmarks, label)
                     if finger_state == '01100':
-                        #take_picture(frame)
+                        take_picture(frame)
                         cv2.putText(frame, 'Picture Taken!', (10, 60), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0,255,255), 2)
 
                     if finger_state == '11111' and song_flag:
-                        #stop_song()
+                        stop_song()
                         song_flag = False
                     if finger_state == '11001' and not song_flag:
-                        #play_song()
+                        play_song()
                         song_flag = True
 
                     if finger_state == '00110' and not cal_flag:
-                        #readschedule()
+                        readschedule()
                         cal_flag = True
 
                     if finger_state == '00111':
-                        # words_of_affirmation()
-                        pass
+                        words_of_affirmation()
 
                     if finger_state == '01001' and not song_flag:
-                        #play_flashing_lights()
+                        play_flashing_lights()
                         song_flag = True
 
 
